@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <label for="body">Body :<label>
                             <input type="text" class="form-control" name="body">
-                        </label>
+                        </div>
 
                         
                         <button type="submit" class="btn btn-success">Post</button>

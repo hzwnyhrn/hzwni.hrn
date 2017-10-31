@@ -14,7 +14,8 @@ class NoteController extends Controller
      */
     public function index()
     {
-        //
+        $notes = Note::orderBy('updated_at','desc')->SimplePaginate(3);
+        return view('notes.index', compact('notes'));
     }
 
     /**
@@ -37,13 +38,16 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
+
+       //Validation
+
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required|max:100'
 
         ]);
 
-        // save to database
+
         $note = new Note;
 
         $note->title = $request->title;
@@ -54,7 +58,7 @@ class NoteController extends Controller
 
         //Return view
 
-        return redirect()->route('notes.create');
+        return redirect()->route('notes.index');
 
     }
 
@@ -77,7 +81,8 @@ class NoteController extends Controller
      */
     public function edit($id)
     {
-        //
+        $notes = Note::find($id);
+        return view('notes.edit', compact('notes'));
     }
 
     /**
@@ -89,7 +94,23 @@ class NoteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $notes = Note::find($id);
+
+        $this->validate($request, [
+            'title' => 'required',
+            'body' => 'required|max:100'
+
+        ]);
+
+        $notes->title = $request->title;
+        $notes->body = $request->body;
+
+        $notes->save();
+
+
+        //Return view
+
+        return redirect()->route('notes.index');
     }
 
     /**
@@ -100,6 +121,10 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $notes = Note::find($id);
+
+        $notes->delete();
+
+        return redirect()->route('notes.index');
     }
 }
